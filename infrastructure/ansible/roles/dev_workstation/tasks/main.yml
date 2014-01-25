@@ -1,0 +1,17 @@
+---
+
+- name: install fish
+  apt: pkg=fish state=latest
+  
+- name: create developer user
+  user: name=developer comment="Developer" generate_ssh_key=yes shell=/usr/bin/fish
+  
+- name: checkout source code
+  git: repo=git://github.com/zabil/refresh.git
+       dest=/home/developer/projects/refresh
+  
+- name: chown source code to developer
+  file: path=/home/developer/projects/refresh recurse=true owner=developer
+  
+- name: install npm dependencies
+  command: chdir=/home/developer/projects/refresh/ui npm install
